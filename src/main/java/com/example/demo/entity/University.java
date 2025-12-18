@@ -25,7 +25,7 @@ private String accreditationLevel;
 private String country;
 
 @Column(nullable = false)
-private Boolean active = true; // default true
+private Boolean active = true;
 
 public University() {}
 
