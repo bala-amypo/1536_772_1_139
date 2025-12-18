@@ -27,7 +27,6 @@ private String country;
 @Column(nullable = false)
 private Boolean active = true; // default true
 
-// Constructors
 public University() {}
 
 public University(String name, String accreditationLevel, String country) {
@@ -37,7 +36,7 @@ this.country = country;
 this.active = true;
 }
 
-// Getters & Setters
+
 public Long getId() {
 return id;
 }
