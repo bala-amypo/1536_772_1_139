@@ -3,73 +3,59 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(
-name = "universities",
-uniqueConstraints = {
-@UniqueConstraint(columnNames = "name")
-}
-)
+@Table(name = "universities")
 public class University {
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-@Column(nullable = false, unique = true)
-private String name;
+    @Column(unique = true, nullable = false)
+    private String name;
 
-@Column(nullable = false)
-private String accreditationLevel;
+    private String accreditationLevel;
+    private String country;
 
-@Column(nullable = false)
-private String country;
+    private Boolean active = true;
 
-@Column(nullable = false)
-private Boolean active = true;
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-public University() {}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-public University(String name, String accreditationLevel, String country) {
-this.name = name;
-this.accreditationLevel = accreditationLevel;
-this.country = country;
-this.active = true;
-}
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
-public Long getId() {
-return id;
-}
+    public String getAccreditationLevel() {
+        return accreditationLevel;
+    }
 
-public String getName() {
-return name;
-}
+    public void setAccreditationLevel(String accreditationLevel) {
+        this.accreditationLevel = accreditationLevel;
+    }
 
-public void setName(String name) {
-this.name = name;
-}
+    public String getCountry() {
+        return country;
+    }
 
-public String getAccreditationLevel() {
-return accreditationLevel;
-}
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
-public void setAccreditationLevel(String accreditationLevel) {
-this.accreditationLevel = accreditationLevel;
-}
+    public Boolean getActive() {
+        return active;
+    }
 
-public String getCountry() {
-return country;
-}
-
-public void setCountry(String country) {
-this.country = country;
-}
-
-public Boolean getActive() {
-return active;
-}
-
-public void setActive(Boolean active) {
-this.active = active;
-}
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
