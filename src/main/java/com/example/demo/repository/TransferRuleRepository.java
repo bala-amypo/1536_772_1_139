@@ -8,7 +8,5 @@ import java.util.List;
 public interface TransferRuleRepository extends JpaRepository<TransferRule, Long> {
 
     List<TransferRule> findBySourceUniversityIdAndTargetUniversityIdAndActiveTrue(
-            Long sourceUniversityId,
-            Long targetUniversityId
-    );
+            Long sourceUniversityId, Long targetUniversityId);
 }
