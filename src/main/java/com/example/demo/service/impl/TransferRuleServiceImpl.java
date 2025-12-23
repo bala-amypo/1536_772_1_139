@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   
+@Service
 public class TransferRuleServiceImpl implements TransferRuleService {
 
     private final TransferRuleRepository transferRuleRepository;
@@ -28,9 +28,10 @@ public class TransferRuleServiceImpl implements TransferRuleService {
         TransferRule existing = transferRuleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transfer rule not found"));
 
-        existing.setRuleDescription(rule.getRuleDescription());
-        existing.setMinCredits(rule.getMinCredits());
-        existing.setActive(rule.isActive());
+        
+        existing.setMinimumOverlapPercentage(rule.getMinimumOverlapPercentage());
+        existing.setCreditHourTolerance(rule.getCreditHourTolerance());
+        existing.setActive(rule.getActive());
 
         return transferRuleRepository.save(existing);
     }
