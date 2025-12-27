@@ -1,34 +1,45 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.TransferEvaluationRequest;
+import com.example.demo.dto.TransferEvaluationResponse;
 import com.example.demo.entity.TransferEvaluationResult;
 import com.example.demo.service.TransferEvaluationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/transfer-evaluation")
+@RequestMapping("/api/transfer-evaluations")
+@Tag(name = "Transfer Evaluation")
 public class TransferEvaluationController {
 
-    private final TransferEvaluationService evaluationService;
+    private final TransferEvaluationService service;
 
-    public TransferEvaluationController(TransferEvaluationService evaluationService) {
-        this.evaluationService = evaluationService;
+    public TransferEvaluationController(TransferEvaluationService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public TransferEvaluationResult evaluate(@RequestParam Long sourceCourseId,
-                                             @RequestParam Long targetCourseId) {
-        return evaluationService.evaluateTransfer(sourceCourseId, targetCourseId);
+    public TransferEvaluationResponse evaluate(@RequestBody TransferEvaluationRequest req) {
+
+        TransferEvaluationResult res =
+                service.evaluateTransfer(
+                        req.getSourceProgramId(),
+                        req.getTargetProgramId()
+                );
+
+        TransferEvaluationResponse dto = new TransferEvaluationResponse();
+        dto.setTotalTransferableCredits(
+                res.getCreditHourDifference() == null ? 0.0 :
+                        (double) res.getCreditHourDifference()
+        );
+        dto.setStatus(res.getIsEligibleForTransfer() ? "APPROVED" : "REJECTED");
+        dto.setRemarks(res.getNotes());
+
+        return dto;
     }
 
     @GetMapping("/{id}")
     public TransferEvaluationResult getById(@PathVariable Long id) {
-        return evaluationService.getEvaluationById(id);
-    }
-
-    @GetMapping("/course/{courseId}")
-    public List<TransferEvaluationResult> getByCourse(@PathVariable Long courseId) {
-        return evaluationService.getEvaluationsForCourse(courseId);
+        return service.getEvaluationById(id);
     }
 }

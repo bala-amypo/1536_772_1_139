@@ -2,43 +2,44 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.University;
 import com.example.demo.service.UniversityService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/universities")
+@Tag(name = "University")
 public class UniversityController {
 
-    private final UniversityService universityService;
+    private final UniversityService service;
 
-    public UniversityController(UniversityService universityService) {
-        this.universityService = universityService;
+    public UniversityController(UniversityService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public University create(@RequestBody University university) {
-        return universityService.createUniversity(university);
+    public University create(@RequestBody University u) {
+        return service.createUniversity(u);
     }
 
     @PutMapping("/{id}")
-    public University update(@PathVariable Long id,
-                             @RequestBody University university) {
-        return universityService.updateUniversity(id, university);
+    public University update(@PathVariable Long id, @RequestBody University u) {
+        return service.updateUniversity(id, u);
     }
 
     @GetMapping("/{id}")
     public University getById(@PathVariable Long id) {
-        return universityService.getUniversityById(id);
+        return service.getUniversityById(id);
     }
 
     @GetMapping
     public List<University> getAll() {
-        return universityService.getAllUniversities();
+        return service.getAllUniversities();
     }
 
     @DeleteMapping("/{id}")
     public void deactivate(@PathVariable Long id) {
-        universityService.deactivateUniversity(id);
+        service.deactivateUniversity(id);
     }
 }
