@@ -2,60 +2,62 @@ package com.example.demo.service.impl;
 
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseContentTopic;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CourseContentTopicRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.service.CourseContentTopicService;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 @Service
 public class CourseContentTopicServiceImpl implements CourseContentTopicService {
 
-    private final CourseContentTopicRepository topicRepo;
-    private final CourseRepository courseRepo;
+    @Autowired
+    CourseContentTopicRepository repo;
 
-    public CourseContentTopicServiceImpl(CourseContentTopicRepository topicRepo,
-                                         CourseRepository courseRepo) {
-        this.topicRepo = topicRepo;
-        this.courseRepo = courseRepo;
+    @Autowired
+    CourseRepository courseRepo;
+
+    public CourseContentTopicServiceImpl() {
     }
 
     @Override
     public CourseContentTopic createTopic(CourseContentTopic topic) {
 
-        if (topic.getTopicName() == null || topic.getTopicName().isEmpty()) {
-            throw new RuntimeException("Topic name");
+        if (topic.getTopicName() == null || topic.getTopicName().isBlank()) {
+            throw new IllegalArgumentException("Topic name required");
         }
 
-        if (topic.getWeightPercentage() < 0 || topic.getWeightPercentage() > 100) {
-            throw new RuntimeException("0-100");
+        if (topic.getWeightPercentage() != null &&
+                (topic.getWeightPercentage() < 0 || topic.getWeightPercentage() > 100)) {
+            throw new IllegalArgumentException("Weight must be 0-100");
         }
 
-        Course course = courseRepo.findById(topic.getCourse().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        Course c = courseRepo.findById(topic.getCourse().getId())
+                .orElseThrow(() -> new RuntimeException("Course not found"));
 
-        topic.setCourse(course);
-        return topicRepo.save(topic);
+        topic.setCourse(c);
+        return repo.save(topic);
     }
 
     @Override
-    public CourseContentTopic updateTopic(Long id, CourseContentTopic updated) {
-        CourseContentTopic topic = getTopicById(id);
-        topic.setTopicName(updated.getTopicName());
-        topic.setWeightPercentage(updated.getWeightPercentage());
-        return topicRepo.save(topic);
+    public CourseContentTopic updateTopic(Long id, CourseContentTopic topic) {
+        CourseContentTopic existing = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Topic not found"));
+        return repo.save(existing);
     }
 
     @Override
     public CourseContentTopic getTopicById(Long id) {
-        return topicRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Topic not found"));
     }
 
     @Override
-    public List<CourseContentTopic> getTopicsByCourse(Long courseId) {
-        return topicRepo.findByCourseId(courseId);
+    public List<CourseContentTopic> getTopicsForCourse(Long courseId) {
+        courseRepo.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+        return repo.findByCourseId(courseId);
     }
 }
