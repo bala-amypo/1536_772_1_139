@@ -4,15 +4,9 @@ import com.example.demo.entity.Course;
 import java.util.List;
 
 public interface CourseService {
-
-    Course createCourse(Long universityId, Course course);
-
+    Course createCourse(Course course);
     Course updateCourse(Long id, Course course);
-
     Course getCourseById(Long id);
-
-    List<Course> getCoursesByUniversity(Long universityId);
-
     void deactivateCourse(Long id);
+    List<Course> getCoursesByUniversity(Long universityId);
 }
-    

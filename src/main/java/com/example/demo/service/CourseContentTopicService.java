@@ -11,5 +11,5 @@ public interface CourseContentTopicService {
 
     CourseContentTopic getTopicById(Long id);
 
-    List<CourseContentTopic> getTopicsByCourse(Long courseId);
+    List<CourseContentTopic> getTopicsForCourse(Long courseId);
 }
