@@ -5,16 +5,17 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -22,7 +23,20 @@ public class User {
 
     private LocalDateTime createdAt;
 
-    // Getters and Setters
+    public User() {}
+
+    public User(String email, String password, Set<String> roles) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
     public Long getId() {
         return id;
     }
@@ -34,32 +48,28 @@ public class User {
     public String getEmail() {
         return email;
     }
-  
+
     public void setEmail(String email) {
         this.email = email;
     }
-  
+
     public String getPassword() {
         return password;
     }
-  
+
     public void setPassword(String password) {
         this.password = password;
     }
-  
+
     public Set<String> getRoles() {
         return roles;
     }
-  
+
     public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
-  
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-  
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }

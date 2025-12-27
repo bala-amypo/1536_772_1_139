@@ -3,22 +3,29 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "universities")
+@Table(name = "universities", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class University {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     private String accreditationLevel;
     private String country;
-
     private Boolean active = true;
 
-    // Getters and Setters
+    public University() {}
+
+    public University(String name, String accreditationLevel, String country) {
+        this.name = name;
+        this.accreditationLevel = accreditationLevel;
+        this.country = country;
+        this.active = true;
+    }
+
     public Long getId() {
         return id;
     }
@@ -57,5 +64,9 @@ public class University {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public boolean isActive() {
+        return active != null && active;
     }
 }
