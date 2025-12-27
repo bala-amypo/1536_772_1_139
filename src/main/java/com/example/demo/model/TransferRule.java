@@ -11,19 +11,28 @@ public class TransferRule {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "source_university_id")
+    @JoinColumn(name = "source_university_id", nullable = false)
     private University sourceUniversity;
 
     @ManyToOne
-    @JoinColumn(name = "target_university_id")
+    @JoinColumn(name = "target_university_id", nullable = false)
     private University targetUniversity;
 
     private Double minimumOverlapPercentage;
-    private Integer creditHourTolerance;
-
+    private Integer creditHourTolerance = 0;
     private Boolean active = true;
 
-    // Getters and Setters
+    public TransferRule() {}
+
+    public TransferRule(University sourceUniversity, University targetUniversity,
+                        Double minimumOverlapPercentage, Integer creditHourTolerance) {
+        this.sourceUniversity = sourceUniversity;
+        this.targetUniversity = targetUniversity;
+        this.minimumOverlapPercentage = minimumOverlapPercentage;
+        this.creditHourTolerance = creditHourTolerance == null ? 0 : creditHourTolerance;
+        this.active = true;
+    }
+
     public Long getId() {
         return id;
     }
@@ -61,7 +70,7 @@ public class TransferRule {
     }
 
     public void setCreditHourTolerance(Integer creditHourTolerance) {
-        this.creditHourTolerance = creditHourTolerance;
+        this.creditHourTolerance = creditHourTolerance == null ? 0 : creditHourTolerance;
     }
 
     public Boolean getActive() {
@@ -70,5 +79,9 @@ public class TransferRule {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public boolean isActive() {
+        return active != null && active;
     }
 }

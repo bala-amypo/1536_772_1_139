@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 @Entity
 @Table(
     name = "courses",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"university_id", "courseCode"})
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = {"university_id", "courseCode"}
+    )
 )
 public class Course {
 
@@ -14,18 +16,30 @@ public class Course {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "university_id")
+    @JoinColumn(name = "university_id", nullable = false)
     private University university;
 
+    @Column(nullable = false)
     private String courseCode;
+
     private String courseName;
     private Integer creditHours;
     private String description;
     private String department;
-
     private Boolean active = true;
 
-    // Getters and Setters
+    public Course() {}
+
+    public Course(University university, String courseCode, String courseName,
+                  Integer creditHours, String department) {
+        this.university = university;
+        this.courseCode = courseCode;
+        this.courseName = courseName;
+        this.creditHours = creditHours;
+        this.department = department;
+        this.active = true;
+    }
+
     public Long getId() {
         return id;
     }
@@ -88,5 +102,9 @@ public class Course {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public boolean isActive() {
+        return active != null && active;
     }
 }

@@ -11,13 +11,22 @@ public class CourseContentTopic {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
+    @Column(nullable = false)
     private String topicName;
+
     private Double weightPercentage;
 
-    // Getters and Setters
+    public CourseContentTopic() {}
+
+    public CourseContentTopic(Course course, String topicName, Double weightPercentage) {
+        this.course = course;
+        this.topicName = topicName;
+        this.weightPercentage = weightPercentage;
+    }
+
     public Long getId() {
         return id;
     }

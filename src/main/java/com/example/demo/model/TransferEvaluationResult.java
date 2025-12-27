@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transfer_evaluation_results")
@@ -12,20 +12,36 @@ public class TransferEvaluationResult {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "source_course_id")
     private Course sourceCourse;
 
     @ManyToOne
-    @JoinColumn(name = "target_course_id")
     private Course targetCourse;
 
     private Double overlapPercentage;
     private Integer creditHourDifference;
     private Boolean isEligibleForTransfer;
-    private Timestamp evaluatedAt;
+    private LocalDateTime evaluatedAt;
     private String notes;
 
-    // Getters and Setters
+    public TransferEvaluationResult() {}
+
+    public TransferEvaluationResult(Course sourceCourse, Course targetCourse,
+                                    Double overlapPercentage, Integer creditHourDifference,
+                                    Boolean isEligibleForTransfer, String notes) {
+        this.sourceCourse = sourceCourse;
+        this.targetCourse = targetCourse;
+        this.overlapPercentage = overlapPercentage;
+        this.creditHourDifference = creditHourDifference;
+        this.isEligibleForTransfer = isEligibleForTransfer;
+        this.notes = notes;
+        this.evaluatedAt = LocalDateTime.now();
+    }
+
+    @PrePersist
+    public void onCreate() {
+        evaluatedAt = LocalDateTime.now();
+    }
+
     public Long getId() {
         return id;
     }
@@ -74,12 +90,8 @@ public class TransferEvaluationResult {
         this.isEligibleForTransfer = isEligibleForTransfer;
     }
 
-    public Timestamp getEvaluatedAt() {
+    public LocalDateTime getEvaluatedAt() {
         return evaluatedAt;
-    }
-
-    public void setEvaluatedAt(Timestamp evaluatedAt) {
-        this.evaluatedAt = evaluatedAt;
     }
 
     public String getNotes() {
